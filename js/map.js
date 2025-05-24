@@ -156,40 +156,6 @@ if (document.getElementById("map")?.offsetParent !== null) {
   window.initMapWithPhotos();
 }
 
-            const el = document.createElement("div");
-            el.className = "map-thumb";
-            el.style.width = "32px";
-            el.style.height = "32px";
-            el.style.borderRadius = "4px";
-            el.style.backgroundSize = "cover";
-            el.style.backgroundPosition = "center";
-            el.style.boxShadow = "0 0 4px rgba(0,0,0,0.5)";
-            el.style.backgroundImage = "url(images/" + photo.id + ".jpg)";
-            el.style.cursor = "pointer";
-            el.onclick = () => showOverlay("images/" + photo.id + ".jpg", photo.caption);
-
-            const marker = new mapboxgl.Marker(el).setLngLat([photo.lng, photo.lat]).addTo(map);
-            photoMarkers.push(marker);
-          });
-        });
-
-        // Toggle button
-        const toggleBtn = document.getElementById("toggle-thumbs");
-        if (toggleBtn) {
-          toggleBtn.addEventListener("click", () => {
-            photoMarkers.forEach(marker => {
-              const el = marker.getElement();
-              el.style.display = el.style.display === "none" ? "block" : "none";
-            });
-          });
-        }
-      });
-  });
-};
-
-if (document.getElementById("map")?.offsetParent !== null) {
-  window.initMapWithPhotos();
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   const infoBtn = document.getElementById("map-info-btn");
