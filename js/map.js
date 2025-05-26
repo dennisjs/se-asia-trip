@@ -281,4 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+  // Force the info box to show on page load
+  infoBox?.classList.add("active");
 });
