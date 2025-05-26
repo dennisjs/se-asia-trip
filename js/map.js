@@ -35,6 +35,104 @@ function buildMap(locations, preserveCenter, preserveZoom) {
   });
 
   map.on("load", () => {
+    const mapInfoBox = document.getElementById("map-info-box");
+    if (mapInfoBox && !document.getElementById("view-toggle")) {
+      const style = document.createElement('style');
+      style.textContent = `
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 40px;
+          height: 22px;
+        }
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background-color: #ccc;
+          transition: .4s;
+          border-radius: 34px;
+        }
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 16px;
+          width: 16px;
+          left: 4px;
+          bottom: 3px;
+          background-color: white;
+          transition: .4s;
+          border-radius: 50%;
+        }
+        input:checked + .slider {
+          background-color: #4caf50;
+        }
+        input:checked + .slider:before {
+          transform: translateX(18px);
+        }
+      `;
+      document.head.appendChild(style);
+
+      const terrainControls = document.createElement("div");
+      terrainControls.innerHTML = `
+        <hr>
+        <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between">
+          <span>Perspective View:</span>
+          <label class="switch">
+            <input type="checkbox" id="view-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between">
+          <span>3D Terrain:</span>
+          <label class="switch">
+            <input type="checkbox" id="terrain-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      `;
+      mapInfoBox.appendChild(terrainControls);
+
+      const viewToggle = document.getElementById('view-toggle');
+      viewToggle.addEventListener('change', (e) => {
+        perspectiveEnabled = e.target.checked;
+        map.easeTo({ pitch: e.target.checked ? 60 : 0, bearing: e.target.checked ? -20 : 0 });
+      });
+
+      const terrainToggle = document.getElementById('terrain-toggle');
+      terrainToggle.addEventListener('change', (e) => {
+        if (currentMapStyle.includes("satellite")) {
+          if (e.target.checked) {
+            if (!map.getSource('mapbox-dem')) {
+              map.addSource('mapbox-dem', {
+                type: 'raster-dem',
+                url: 'mapbox://mapbox.terrain-rgb',
+                tileSize: 512,
+                maxzoom: 14
+              });
+            }
+            map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
+            if (!map.getLayer('hillshade')) {
+              map.addLayer({
+                id: 'hillshade',
+                type: 'hillshade',
+                source: 'mapbox-dem',
+                layout: {},
+                paint: {}
+              });
+            }
+          } else {
+            map.setTerrain(null);
+            if (map.getLayer('hillshade')) map.removeLayer('hillshade');
+          }
+        }
+      });
+    }
     const coordinates = locations.map(loc => [loc.lng, loc.lat]);
     map.addSource("route", {
       type: "geojson",
