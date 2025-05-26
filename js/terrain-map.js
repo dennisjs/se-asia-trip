@@ -12,17 +12,21 @@ const map = new mapboxgl.Map({
 });
 
 map.on('load', async () => {
-  // Fetch current location from location.json
+  // Fetch most recent location from location.json
   try {
     const response = await fetch('location.json');
-    const location = await response.json();
-    const lng = location.lng;
-    const lat = location.lat;
-    const name = location.name || "";
+    const locations = await response.json();
 
-    map.jumpTo({ center: [lng, lat] });
+    // Sort by arrival_date and get the latest
+    const latest = locations
+      .filter(loc => loc.arrival_date)
+      .sort((a, b) => new Date(b.arrival_date) - new Date(a.arrival_date))[0];
+
+    if (latest && latest.lng && latest.lat) {
+      map.jumpTo({ center: [latest.lng, latest.lat] });
+    }
   } catch (e) {
-    console.warn("Could not load location.json, using default center.");
+    console.warn("Could not load location.json, using default center.", e);
   }
 
   map.addSource('mapbox-dem', {
