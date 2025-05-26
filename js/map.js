@@ -26,7 +26,10 @@ function buildMap(locations, preserveCenter, preserveZoom) {
     container: 'map',
     style: currentMapStyle,
     center: preserveCenter ? [preserveCenter.lng, preserveCenter.lat] : [lng, lat],
-    zoom: preserveZoom || 12
+    zoom: preserveZoom || 12,
+    pitch: 0,
+    bearing: 0,
+    antialias: true
   });
 
   map.on("load", () => {
@@ -100,21 +103,62 @@ function buildMap(locations, preserveCenter, preserveZoom) {
 
     const mapInfoBox = document.getElementById("map-info-box");
     if (mapInfoBox && !document.getElementById("view-toggle")) {
+      const style = document.createElement('style');
+      style.textContent = `
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 40px;
+          height: 22px;
+        }
+        .switch input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background-color: #ccc;
+          transition: .4s;
+          border-radius: 34px;
+        }
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 16px;
+          width: 16px;
+          left: 4px;
+          bottom: 3px;
+          background-color: white;
+          transition: .4s;
+          border-radius: 50%;
+        }
+        input:checked + .slider {
+          background-color: #4caf50;
+        }
+        input:checked + .slider:before {
+          transform: translateX(18px);
+        }
+      `;
+      document.head.appendChild(style);
+
       const terrainControls = document.createElement("div");
       terrainControls.innerHTML = `
         <hr>
-        <div style="margin-top: 8px">
-          <label for="view-toggle">View:</label>
+        <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between">
+          <span>View:</span>
           <label class="switch">
             <input type="checkbox" id="view-toggle">
-            <span class="slider round"></span>
+            <span class="slider"></span>
           </label>
         </div>
-        <div style="margin-top: 8px">
-          <label for="terrain-toggle">3D Terrain:</label>
+        <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between">
+          <span>3D Terrain:</span>
           <label class="switch">
             <input type="checkbox" id="terrain-toggle">
-            <span class="slider round"></span>
+            <span class="slider"></span>
           </label>
         </div>
       `;
