@@ -1,22 +1,4 @@
-// terrain-map.js
 mapboxgl.accessToken = window.CONFIG.MAPBOX_TOKEN;
-
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/satellite-streets-v12',
-  center: [100.5, 13.75],
-  zoom: 10,
-  pitch: 0,
-  bearing: 0,
-  antialias: true
-});
-
-map.on('load', async () => {
-  try {
-    const response = await fetch('location.json');
-    const locations = await response.json();
-
-    const latest = locationsmapboxgl.accessToken = window.CONFIG.MAPBOX_TOKEN;
 
 async function fetchLatestLocation() {
   try {
