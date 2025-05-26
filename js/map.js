@@ -99,32 +99,40 @@ function buildMap(locations, preserveCenter, preserveZoom) {
     });
 
     const mapInfoBox = document.getElementById("map-info-box");
-    if (mapInfoBox) {
+    if (mapInfoBox && !document.getElementById("view-toggle")) {
       const terrainControls = document.createElement("div");
       terrainControls.innerHTML = `
         <hr>
         <div style="margin-top: 8px">
           <label for="view-toggle">View:</label>
-          <select id="view-toggle">
-            <option value="overhead" selected>Overhead</option>
-            <option value="perspective">Perspective</option>
-          </select>
+          <label class="switch">
+            <input type="checkbox" id="view-toggle">
+            <span class="slider round"></span>
+          </label>
         </div>
         <div style="margin-top: 8px">
-          <label for="exaggeration">3D Terrain:</label>
-          <input type="range" id="exaggeration" min="0" max="3" step="0.1" value="0">
-          <span id="exaggeration-value">0.0</span>
+          <label for="terrain-toggle">3D Terrain:</label>
+          <label class="switch">
+            <input type="checkbox" id="terrain-toggle">
+            <span class="slider round"></span>
+          </label>
         </div>
       `;
       mapInfoBox.appendChild(terrainControls);
 
-      const slider = document.getElementById('exaggeration');
-      const label = document.getElementById('exaggeration-value');
-      slider.addEventListener('input', (e) => {
-        const value = parseFloat(e.target.value);
-        label.textContent = value.toFixed(1);
+      const viewToggle = document.getElementById('view-toggle');
+      viewToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          map.easeTo({ pitch: 60, bearing: -20 });
+        } else {
+          map.easeTo({ pitch: 0, bearing: 0 });
+        }
+      });
+
+      const terrainToggle = document.getElementById('terrain-toggle');
+      terrainToggle.addEventListener('change', (e) => {
         if (currentMapStyle.includes("satellite")) {
-          if (value > 0) {
+          if (e.target.checked) {
             if (!map.getSource('mapbox-dem')) {
               map.addSource('mapbox-dem', {
                 type: 'raster-dem',
@@ -133,7 +141,7 @@ function buildMap(locations, preserveCenter, preserveZoom) {
                 maxzoom: 14
               });
             }
-            map.setTerrain({ source: 'mapbox-dem', exaggeration: value });
+            map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
             if (!map.getLayer('hillshade')) {
               map.addLayer({
                 id: 'hillshade',
@@ -147,15 +155,6 @@ function buildMap(locations, preserveCenter, preserveZoom) {
             map.setTerrain(null);
             if (map.getLayer('hillshade')) map.removeLayer('hillshade');
           }
-        }
-      });
-
-      const viewToggle = document.getElementById('view-toggle');
-      viewToggle.addEventListener('change', (e) => {
-        if (e.target.value === 'overhead') {
-          map.easeTo({ pitch: 0, bearing: 0 });
-        } else {
-          map.easeTo({ pitch: 60, bearing: -20 });
         }
       });
     }
