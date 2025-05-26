@@ -105,6 +105,66 @@ function buildMap(locations, preserveCenter, preserveZoom) {
       document.getElementById("map-info-box")?.classList.add("active");
     }
     mapInfoBoxWasOpen = false;
+});
+    map.addLayer({
+      id: "route-line",
+      type: "line",
+      source: "route",
+      layout: {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      paint: {
+        "line-color": "#66aadd",
+        "line-width": 2.5,
+        "line-opacity": 0.8,
+        "line-dasharray": [3, 5]
+      }
+    });
+
+    new mapboxgl.Marker({ color: "red" }).setLngLat([lng, lat]).addTo(map);
+
+    infoBox = document.createElement('div');
+    infoBox.id = 'location-box';
+    infoBox.className = 'location-info-box';
+    infoBox.innerHTML = "<strong>My Current Location:</strong><br>" + place + "<br>Loading weather...";
+    document.body.appendChild(infoBox);
+
+    function positionBox() {
+      const pos = map.project([lng, lat]);
+      infoBox.style.left = (pos.x + 20) + "px";
+      infoBox.style.top = (pos.y - 20) + "px";
+    }
+    map.on('move', positionBox);
+    positionBox();
+    updateWeatherBox(lat, lng, place, infoBox);
+
+    locations.slice(0, -1).forEach(loc => {
+      if (!loc.lat || !loc.lng) return;
+      new mapboxgl.Marker({ color: "gray" }).setLngLat([loc.lng, loc.lat]).addTo(map);
+
+      const box = document.createElement("div");
+      box.className = "location-info-box";
+      const arrival = loc.arrival_date || "?";
+      const departure = loc.departure_date || "?";
+      let rangeStr = "Arrived: " + arrival;
+      if (departure) rangeStr += "<br>Departed: " + departure;
+      box.innerHTML = "<strong>" + loc.place + "</strong><br>" + rangeStr;
+      document.body.appendChild(box);
+
+      function positionGrayBox() {
+        const pt = map.project([loc.lng, loc.lat]);
+        box.style.left = (pt.x + 20) + "px";
+        box.style.top = (pt.y - 20) + "px";
+      }
+      map.on("move", positionGrayBox);
+      positionGrayBox();
+    });
+
+    if (mapInfoBoxWasOpen) {
+      document.getElementById("map-info-box")?.classList.add("active");
+    }
+    mapInfoBoxWasOpen = false;
   });
     map.addLayer({
       id: "route-line",
