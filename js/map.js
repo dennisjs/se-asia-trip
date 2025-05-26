@@ -148,7 +148,7 @@ function buildMap(locations, preserveCenter, preserveZoom) {
       terrainControls.innerHTML = `
         <hr>
         <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between">
-          <span>View:</span>
+          <span>Perspective View:</span>
           <label class="switch">
             <input type="checkbox" id="view-toggle">
             <span class="slider"></span>
@@ -253,10 +253,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggle-satellite");
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
-      const isSatellite = currentMapStyle === 'mapbox://styles/mapbox/satellite-v9';
+      const isSatellite = currentMapStyle === 'mapbox://styles/mapbox/satellite-streets-v12';
       currentMapStyle = isSatellite
         ? 'mapbox://styles/mapbox/streets-v12'
-        : 'mapbox://styles/mapbox/satellite-v9';
+        : 'mapbox://styles/mapbox/satellite-streets-v12';
       toggleBtn.textContent = isSatellite ? 'Satellite View' : 'Map View';
 
       const center = map.getCenter();
@@ -278,3 +278,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
