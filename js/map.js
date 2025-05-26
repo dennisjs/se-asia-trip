@@ -15,6 +15,7 @@ async function fetchLatestLocation() {
 
 let currentMapStyle = 'mapbox://styles/mapbox/streets-v12';
 let map, photoMarkers = [], infoBox;
+let perspectiveEnabled = false;
 
 function buildMap(locations, preserveCenter, preserveZoom) {
   if (!locations.length) return;
@@ -27,8 +28,8 @@ function buildMap(locations, preserveCenter, preserveZoom) {
     style: currentMapStyle,
     center: preserveCenter ? [preserveCenter.lng, preserveCenter.lat] : [lng, lat],
     zoom: preserveZoom || 12,
-    pitch: 0,
-    bearing: 0,
+    pitch: perspectiveEnabled ? 60 : 0,
+    bearing: perspectiveEnabled ? -20 : 0,
     antialias: true
   });
 
@@ -166,6 +167,7 @@ function buildMap(locations, preserveCenter, preserveZoom) {
 
       const viewToggle = document.getElementById('view-toggle');
       viewToggle.addEventListener('change', (e) => {
+        perspectiveEnabled = e.target.checked;
         if (e.target.checked) {
           map.easeTo({ pitch: 60, bearing: -20 });
         } else {
@@ -278,4 +280,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
