@@ -21,18 +21,26 @@
            style="height: 32px; vertical-align: middle; margin-right: 8px;">
       southeast asia trip
     </h1>
-    <nav>
-      <a href="#" onclick="showSection('map-section')">Map</a>
-      <a href="#" onclick="showSection('visited')">Places & Photos</a>
-      <a href="itinerary.html">Itinerary</a>
-      <a href="messages.html">Messages</a>
-      <a href="weather.html">Weather</a>
-      <a href="daily.html">The Daily Thing?</a>
-    </nav>
-    <button id="toggle-thumbs" class="thumb-toggle-btn">Toggle Thumbnails</button>
-    <button id="map-info-btn" class="thumb-toggle-btn">Map Info</button>
+
+    <div class="nav-and-buttons">
+      <nav>
+        <a href="#" onclick="showSection('map-section')">Map</a>
+        <a href="#" onclick="showSection('visited')">Places & Photos</a>
+        <a href="itinerary.html">Itinerary</a>
+        <a href="messages.html">Messages</a>
+        <a href="weather.html">Weather</a>
+        <a href="daily.html">The Daily Thing?</a>
+        <a href="terrain.html">3D Terrain</a>
+      </nav>
+      <div class="button-row">
+        <button id="toggle-thumbnails" class="thumb-toggle-btn">Toggle Thumbnails</button>
+        <button id="toggle-satellite" class="thumb-toggle-btn">Satellite View</button>
+        <button id="map-info-btn" class="thumb-toggle-btn">Map Controls</button>
+      </div>
+    </div>
   </div>
 </header>
+
 
 <div id="map-section" class="section active">
   <div id="map"></div>
@@ -67,10 +75,9 @@
 
 <div id="map-info-box">
   <strong>How to Use the Map:</strong><br><br>
-  – Tap markers to view photos<br>
-  – Pinch or scroll to zoom<br>
+  – Hold middle mouse button & drag for perspective view<br>
+  – Scroll or pinch to zoom<br>
   – Drag to pan<br>
-  – Toggle thumbnails to show/hide photos
 </div>
 
 </body>
