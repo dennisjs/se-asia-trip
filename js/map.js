@@ -6,8 +6,8 @@ const map = new mapboxgl.Map({
   style: 'mapbox://styles/mapbox/satellite-streets-v12',
   center: [100.5, 13.75],
   zoom: 10,
-  pitch: 60,
-  bearing: -20,
+  pitch: 0,
+  bearing: 0,
   antialias: true
 });
 
@@ -27,67 +27,66 @@ map.on('load', async () => {
     console.warn("Could not load location.json, using default center.", e);
   }
 
-  map.addSource('mapbox-dem', {
-    type: 'raster-dem',
-    url: 'mapbox://mapbox.terrain-rgb',
-    tileSize: 512,
-    maxzoom: 14
-  });
+  const mapInfoBox = document.getElementById("map-info-box");
+  if (mapInfoBox) {
+    const terrainControls = document.createElement("div");
+    terrainControls.innerHTML = `
+      <hr>
+      <div style="margin-top: 8px">
+        <label for="view-toggle">View:</label>
+        <select id="view-toggle">
+          <option value="overhead" selected>Overhead</option>
+          <option value="perspective">Perspective</option>
+        </select>
+      </div>
+      <div style="margin-top: 8px">
+        <label for="exaggeration">Terrain:</label>
+        <input type="range" id="exaggeration" min="0" max="3" step="0.1" value="0">
+        <span id="exaggeration-value">0.0</span>
+      </div>
+    `;
+    mapInfoBox.appendChild(terrainControls);
 
-  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
+    // Hook up exaggeration slider
+    const slider = document.getElementById('exaggeration');
+    const label = document.getElementById('exaggeration-value');
 
-  map.addLayer({
-    id: 'hillshade',
-    type: 'hillshade',
-    source: 'mapbox-dem',
-    layout: {},
-    paint: {}
-  });
+    slider.addEventListener('input', (e) => {
+      const value = parseFloat(e.target.value);
+      label.textContent = value.toFixed(1);
+      if (value > 0) {
+        if (!map.getSource('mapbox-dem')) {
+          map.addSource('mapbox-dem', {
+            type: 'raster-dem',
+            url: 'mapbox://mapbox.terrain-rgb',
+            tileSize: 512,
+            maxzoom: 14
+          });
+        }
+        map.setTerrain({ source: 'mapbox-dem', exaggeration: value });
+        if (!map.getLayer('hillshade')) {
+          map.addLayer({
+            id: 'hillshade',
+            type: 'hillshade',
+            source: 'mapbox-dem',
+            layout: {},
+            paint: {}
+          });
+        }
+      } else {
+        map.setTerrain(null);
+        if (map.getLayer('hillshade')) map.removeLayer('hillshade');
+      }
+    });
 
-  // Add floating controls to top-right
-  const controlBox = document.createElement('div');
-  controlBox.style.position = 'absolute';
-  controlBox.style.top = '10px';
-  controlBox.style.right = '10px';
-  controlBox.style.background = 'white';
-  controlBox.style.padding = '10px';
-  controlBox.style.borderRadius = '8px';
-  controlBox.style.boxShadow = '0 0 5px rgba(0,0,0,0.2)';
-  controlBox.style.zIndex = '1';
-  controlBox.innerHTML = `
-    <div>
-      <label for="view-toggle">View:</label>
-      <select id="view-toggle">
-        <option value="overhead">Overhead</option>
-        <option value="perspective" selected>Perspective</option>
-      </select>
-    </div>
-    <div style="margin-top: 8px;">
-      <label for="exaggeration">Exaggeration:</label>
-      <input type="range" id="exaggeration" min="0" max="3" step="0.1" value="1">
-      <span id="exaggeration-value">1.0</span>
-    </div>
-  `;
-  document.body.appendChild(controlBox);
-
-  // Hook up exaggeration slider
-  const slider = document.getElementById('exaggeration');
-  const label = document.getElementById('exaggeration-value');
-
-  slider.addEventListener('input', (e) => {
-    const value = parseFloat(e.target.value);
-    map.setTerrain({ source: 'mapbox-dem', exaggeration: value });
-    label.textContent = value.toFixed(1);
-  });
-
-  // Hook up overhead/perspective toggle
-  const viewToggle = document.getElementById('view-toggle');
-  viewToggle.addEventListener('change', (e) => {
-    if (e.target.value === 'overhead') {
-      map.easeTo({ pitch: 0, bearing: 0 });
-    } else {
-      map.easeTo({ pitch: 60, bearing: -20 });
-    }
-  });
+    // Hook up overhead/perspective toggle
+    const viewToggle = document.getElementById('view-toggle');
+    viewToggle.addEventListener('change', (e) => {
+      if (e.target.value === 'overhead') {
+        map.easeTo({ pitch: 0, bearing: 0 });
+      } else {
+        map.easeTo({ pitch: 60, bearing: -20 });
+      }
+    });
+  }
 });
-
