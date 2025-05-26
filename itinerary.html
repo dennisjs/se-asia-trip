@@ -97,9 +97,8 @@
   </div>
 
   <script type="module">
-    import { MAPBOX_TOKEN } from './js/config.js';
 
-    mapboxgl.accessToken = MAPBOX_API_KEY;
+    mapboxgl.accessToken = window.CONFIG.MAPBOX_TOKEN;
 
     const map = new mapboxgl.Map({
       container: 'map-container',
