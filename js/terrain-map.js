@@ -4,14 +4,27 @@ mapboxgl.accessToken = window.CONFIG.MAPBOX_TOKEN;
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/satellite-streets-v12',
-  center: [100.5, 13.75],  // Default view (Bangkok region)
+  center: [100.5, 13.75],  // Temporary default view
   zoom: 10,
   pitch: 60,
   bearing: -20,
   antialias: true
 });
 
-map.on('load', () => {
+map.on('load', async () => {
+  // Fetch current location from location.json
+  try {
+    const response = await fetch('location.json');
+    const location = await response.json();
+    const lng = location.lng;
+    const lat = location.lat;
+    const name = location.name || "";
+
+    map.jumpTo({ center: [lng, lat] });
+  } catch (e) {
+    console.warn("Could not load location.json, using default center.");
+  }
+
   map.addSource('mapbox-dem', {
     type: 'raster-dem',
     url: 'mapbox://mapbox.terrain-rgb',
