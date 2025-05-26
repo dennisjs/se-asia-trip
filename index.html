@@ -1,90 +1,77 @@
-// map.js
-mapboxgl.accessToken = window.CONFIG.MAPBOX_TOKEN;
 
-async function fetchLatestLocation() {
-  try {
-    const res = await fetch("location.json");
-    const locations = await res.json();
-    if (!Array.isArray(locations)) return [locations];
-    return locations;
-  } catch (e) {
-    console.error("Location fetch error:", e);
-    return [];
-  }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <title>southeast asia trip</title>
+  <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://img.icons8.com/?size=100&id=AojTOk8jMESD&format=png&color=000000" />
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/lightbox.css">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+</head>
+<body>
 
-let currentMapStyle = 'mapbox://styles/mapbox/streets-v12';
-let map, photoMarkers = [], infoBox;
-let perspectiveEnabled = false;
-let mapInfoBoxWasOpen = false; // NEW FLAG
+<header>
+  <div class="nav-wrapper">
+    <h1>
+      <img src="https://img.icons8.com/?size=100&id=AojTOk8jMESD&format=png&color=000000"
+           alt="Temple Icon"
+           style="height: 32px; vertical-align: middle; margin-right: 8px;">
+      southeast asia trip
+    </h1>
+    <nav>
+      <a href="#" onclick="showSection('map-section')">Map</a>
+      <a href="#" onclick="showSection('visited')">Places & Photos</a>
+      <a href="itinerary.html">Itinerary</a>
+      <a href="messages.html">Messages</a>
+      <a href="weather.html">Weather</a>
+      <a href="daily.html">The Daily Thing?</a>
+    </nav>
+    <button id="toggle-thumbs" class="thumb-toggle-btn">Toggle Thumbnails</button>
+    <button id="map-info-btn" class="thumb-toggle-btn">Map Info</button>
+  </div>
+</header>
 
-function buildMap(locations, preserveCenter, preserveZoom) {
-  if (!locations.length) return;
+<div id="map-section" class="section active">
+  <div id="map"></div>
+</div>
 
-  const current = locations[locations.length - 1];
-  const { lat, lng, place } = current;
+<div id="visited" class="section">
+  <h2 class="timeline-title">My Journey</h2>
+  <div id="timeline-content">Loading timeline...</div>
+</div>
 
-  map = new mapboxgl.Map({
-    container: 'map',
-    style: currentMapStyle,
-    center: preserveCenter ? [preserveCenter.lng, preserveCenter.lat] : [lng, lat],
-    zoom: preserveZoom || 12,
-    pitch: perspectiveEnabled ? 60 : 0,
-    bearing: perspectiveEnabled ? -20 : 0,
-    antialias: true
+<div class="overlay" id="photo-overlay">
+  <div class="drag-handle"></div>
+  <img id="overlay-img" src="" alt="Photo" />
+  <p id="overlay-caption"></p>
+  <div class="close-btn" onclick="hideOverlay()">Close</div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<script src="js/section_control.js"></script>
+<script src="js/weather_lucide.js"></script>
+<script src="js/map.js"></script>
+<script src="js/overlay.js"></script>
+<script src="js/lightbox.js"></script>  
+<script src="js/timeline.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    loadTimeline();
   });
+</script> 
 
-  map.on("load", () => {
-    if (mapInfoBoxWasOpen) {
-      document.getElementById("map-info-box")?.classList.add("active");
-    }
-    mapInfoBoxWasOpen = false;
+<div id="map-info-box">
+  <strong>How to Use the Map:</strong><br><br>
+  – Tap markers to view photos<br>
+  – Pinch or scroll to zoom<br>
+  – Drag to pan<br>
+  – Toggle thumbnails to show/hide photos
+</div>
 
-    // ... (rest of buildMap unchanged)
-
-    // [REMAINDER OMITTED FOR BREVITY — no changes required here]
-  });
-}
-
-window.initMapWithPhotos = function (preserveCenter = null, preserveZoom = null) {
-  document.querySelectorAll(".location-info-box").forEach(el => el.remove());
-  fetchLatestLocation().then(locations => buildMap(locations, preserveCenter, preserveZoom));
-};
-
-if (document.getElementById("map")?.offsetParent !== null) {
-  window.initMapWithPhotos();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("toggle-satellite");
-  if (toggleBtn) {
-    toggleBtn.addEventListener("click", () => {
-      const isSatellite = currentMapStyle === 'mapbox://styles/mapbox/satellite-streets-v12';
-      currentMapStyle = isSatellite
-        ? 'mapbox://styles/mapbox/streets-v12'
-        : 'mapbox://styles/mapbox/satellite-streets-v12';
-      toggleBtn.textContent = isSatellite ? 'Satellite View' : 'Map View';
-
-      const center = map.getCenter();
-      const zoom = map.getZoom();
-
-      const infoBox = document.getElementById("map-info-box");
-      mapInfoBoxWasOpen = infoBox?.classList.contains("active");
-
-      window.initMapWithPhotos(center, zoom);
-    });
-  }
-
-  const infoBtn = document.getElementById("map-info-btn");
-  const infoBox = document.getElementById("map-info-box");
-  if (infoBtn && infoBox) {
-    infoBtn.addEventListener("click", () => {
-      infoBox.classList.toggle("active");
-    });
-    document.addEventListener("click", (e) => {
-      if (!infoBox.contains(e.target) && e.target !== infoBtn) {
-        infoBox.classList.remove("active");
-      }
-    });
-  }
-});
+</body>
+</html>
