@@ -30,6 +30,26 @@ function buildMap(locations, preserveCenter, preserveZoom) {
   });
 
   map.on("load", () => {
+    if (map.getStyle().sprite.includes('satellite')) {
+      map.addSource('mapbox-dem', {
+        type: 'raster-dem',
+        url: 'mapbox://mapbox.terrain-rgb',
+        tileSize: 512,
+        maxzoom: 14
+      });
+
+      map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
+
+      map.addLayer({
+        id: 'hillshade',
+        type: 'hillshade',
+        source: 'mapbox-dem',
+        layout: {},
+        paint: {}
+      });
+    }
+
+
     const coordinates = locations.map(loc => [loc.lng, loc.lat]);
 
     map.addSource("route", {
@@ -178,6 +198,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
-
-
