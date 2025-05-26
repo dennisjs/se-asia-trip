@@ -1,3 +1,4 @@
+// map.js
 mapboxgl.accessToken = window.CONFIG.MAPBOX_TOKEN;
 
 async function fetchLatestLocation() {
@@ -26,7 +27,6 @@ function buildMap(locations, preserveCenter, preserveZoom) {
     style: currentMapStyle,
     center: preserveCenter ? [preserveCenter.lng, preserveCenter.lat] : [lng, lat],
     zoom: preserveZoom || 12
-
   });
 
   map.on("load", () => {
@@ -98,6 +98,68 @@ function buildMap(locations, preserveCenter, preserveZoom) {
       positionGrayBox();
     });
 
+    const mapInfoBox = document.getElementById("map-info-box");
+    if (mapInfoBox) {
+      const terrainControls = document.createElement("div");
+      terrainControls.innerHTML = `
+        <hr>
+        <div style="margin-top: 8px">
+          <label for="view-toggle">View:</label>
+          <select id="view-toggle">
+            <option value="overhead" selected>Overhead</option>
+            <option value="perspective">Perspective</option>
+          </select>
+        </div>
+        <div style="margin-top: 8px">
+          <label for="exaggeration">3D Terrain:</label>
+          <input type="range" id="exaggeration" min="0" max="3" step="0.1" value="0">
+          <span id="exaggeration-value">0.0</span>
+        </div>
+      `;
+      mapInfoBox.appendChild(terrainControls);
+
+      const slider = document.getElementById('exaggeration');
+      const label = document.getElementById('exaggeration-value');
+      slider.addEventListener('input', (e) => {
+        const value = parseFloat(e.target.value);
+        label.textContent = value.toFixed(1);
+        if (currentMapStyle.includes("satellite")) {
+          if (value > 0) {
+            if (!map.getSource('mapbox-dem')) {
+              map.addSource('mapbox-dem', {
+                type: 'raster-dem',
+                url: 'mapbox://mapbox.terrain-rgb',
+                tileSize: 512,
+                maxzoom: 14
+              });
+            }
+            map.setTerrain({ source: 'mapbox-dem', exaggeration: value });
+            if (!map.getLayer('hillshade')) {
+              map.addLayer({
+                id: 'hillshade',
+                type: 'hillshade',
+                source: 'mapbox-dem',
+                layout: {},
+                paint: {}
+              });
+            }
+          } else {
+            map.setTerrain(null);
+            if (map.getLayer('hillshade')) map.removeLayer('hillshade');
+          }
+        }
+      });
+
+      const viewToggle = document.getElementById('view-toggle');
+      viewToggle.addEventListener('change', (e) => {
+        if (e.target.value === 'overhead') {
+          map.easeTo({ pitch: 0, bearing: 0 });
+        } else {
+          map.easeTo({ pitch: 60, bearing: -20 });
+        }
+      });
+    }
+
     photoMarkers = [];
     fetch("timeline.json")
       .then(r => r.json())
@@ -123,7 +185,7 @@ function buildMap(locations, preserveCenter, preserveZoom) {
 
         const toggleBtn = document.getElementById("toggle-thumbnails");
         if (toggleBtn) {
-          toggleBtn.onclick = null; // Clear any previous listener
+          toggleBtn.onclick = null;
           toggleBtn.onclick = () => {
             photoMarkers.forEach(marker => {
               const el = marker.getElement();
@@ -131,7 +193,6 @@ function buildMap(locations, preserveCenter, preserveZoom) {
             });
           };
         }
-
       });
   });
 }
@@ -154,15 +215,11 @@ document.addEventListener("DOMContentLoaded", () => {
         ? 'mapbox://styles/mapbox/streets-v12'
         : 'mapbox://styles/mapbox/satellite-v9';
       toggleBtn.textContent = isSatellite ? 'Satellite View' : 'Map View';
-    
-      // Save current view before destroying map
+
       const center = map.getCenter();
       const zoom = map.getZoom();
-    
-      // Load new map style and preserve view
       window.initMapWithPhotos(center, zoom);
     });
-
   }
 
   const infoBtn = document.getElementById("map-info-btn");
