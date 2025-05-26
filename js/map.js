@@ -35,6 +35,40 @@ function buildMap(locations, preserveCenter, preserveZoom) {
   });
 
   map.on("load", () => {
+    photoMarkers = [];
+    fetch("timeline.json")
+      .then(r => r.json())
+      .then(timeline => {
+        timeline.forEach(day => {
+          (day.photos || []).forEach(photo => {
+            if (!photo.lat || !photo.lng) return;
+
+            const el = document.createElement("div");
+            el.className = "map-thumb";
+            el.style.cssText = `
+              width: 32px; height: 32px; border-radius: 4px;
+              background-size: cover; background-position: center;
+              box-shadow: 0 0 4px rgba(0,0,0,0.5);
+              background-image: url(images/${photo.id}.jpg);
+              cursor: pointer;
+            `;
+            el.onclick = () => showOverlay("images/" + photo.id + ".jpg", photo.caption);
+            const marker = new mapboxgl.Marker(el).setLngLat([photo.lng, photo.lat]).addTo(map);
+            photoMarkers.push(marker);
+          });
+        });
+
+        const toggleBtn = document.getElementById("toggle-thumbnails");
+        if (toggleBtn) {
+          toggleBtn.onclick = null; // Clear any previous listener
+          toggleBtn.onclick = () => {
+            photoMarkers.forEach(marker => {
+              const el = marker.getElement();
+              el.style.display = el.style.display === "none" ? "block" : "none";
+            });
+          };
+        }
+      });
     const mapInfoBox = document.getElementById("map-info-box");
     if (mapInfoBox && !document.getElementById("view-toggle")) {
       const style = document.createElement('style');
