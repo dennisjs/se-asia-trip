@@ -1,4 +1,3 @@
-// map.js
 mapboxgl.accessToken = window.CONFIG.MAPBOX_TOKEN;
 
 async function fetchLatestLocation() {
