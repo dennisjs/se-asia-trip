@@ -281,4 +281,5 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+  infoBox?.classList.add("active");
 });
