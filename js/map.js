@@ -50,7 +50,7 @@ if (rememberViewToggle) {
     terrainToggle.checked = true;
     terrainToggle.dispatchEvent(new Event('change'));
   }
-});
+}
       }
       map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
       if (!map.getLayer('hillshade')) {
