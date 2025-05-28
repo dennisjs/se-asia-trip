@@ -16,8 +16,6 @@ async function fetchLatestLocation() {
 let currentMapStyle = 'mapbox://styles/mapbox/streets-v12';
 let map, photoMarkers = [], infoBox;
 let perspectiveEnabled = false;
-let rememberViewToggle = false;
-let rememberTerrainToggle = false;
 let mapInfoBoxWasOpen = false; // NEW FLAG
 
 function buildMap(locations, preserveCenter, preserveZoom) {
@@ -37,23 +35,6 @@ function buildMap(locations, preserveCenter, preserveZoom) {
   });
 
   map.on("load", () => {
-if (rememberViewToggle) {
-      perspectiveEnabled = true;
-      map.easeTo({ pitch: 60, bearing: -20 });
-    } else {
-      perspectiveEnabled = false;
-    }
-
-    if (rememberTerrainToggle && currentMapStyle.includes("satellite")) {
-  const terrainToggle = document.getElementById("terrain-toggle");
-  if (terrainToggle) {
-    terrainToggle.checked = true;
-    terrainToggle.dispatchEvent(new Event('change'));
-  }
-}
-      }
-      
-    }
     photoMarkers = [];
     fetch("timeline.json")
       .then(r => r.json())
@@ -169,7 +150,16 @@ if (rememberViewToggle) {
                 maxzoom: 14
               });
             }
-            
+            map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
+            if (!map.getLayer('hillshade')) {
+              map.addLayer({
+                id: 'hillshade',
+                type: 'hillshade',
+                source: 'mapbox-dem',
+                layout: {},
+                paint: {}
+              });
+            }
           } else {
             map.setTerrain(null);
             if (map.getLayer('hillshade')) map.removeLayer('hillshade');
@@ -263,44 +253,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggle-satellite");
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
-    const isSatellite = currentMapStyle === 'mapbox://styles/mapbox/satellite-streets-v12';
-    currentMapStyle = isSatellite
-      ? 'mapbox://styles/mapbox/streets-v12'
-      : 'mapbox://styles/mapbox/satellite-streets-v12';
-    toggleBtn.textContent = isSatellite ? 'Satellite View' : 'Map View';
+      const isSatellite = currentMapStyle === 'mapbox://styles/mapbox/satellite-streets-v12';
+      currentMapStyle = isSatellite
+        ? 'mapbox://styles/mapbox/streets-v12'
+        : 'mapbox://styles/mapbox/satellite-streets-v12';
+      toggleBtn.textContent = isSatellite ? 'Satellite View' : 'Map View';
 
-    const center = map.getCenter();
-    const zoom = map.getZoom();
+      const center = map.getCenter();
+      const zoom = map.getZoom();
 
-    const infoBox = document.getElementById("map-info-box");
-    mapInfoBoxWasOpen = infoBox?.classList.contains("active");
+      const infoBox = document.getElementById("map-info-box");
+      mapInfoBoxWasOpen = infoBox?.classList.contains("active");
 
-    const viewChecked = document.getElementById("view-toggle")?.checked;
-    const terrainChecked = document.getElementById("terrain-toggle")?.checked;
-
-    window.initMapWithPhotos(center, zoom);
-
-    map.on("style.load", () => {
-      if (viewChecked) {
-        perspectiveEnabled = true;
-        map.easeTo({ pitch: 60, bearing: -20 });
-      } else {
-        perspectiveEnabled = false;
-      }
-
-      if (terrainChecked && currentMapStyle.includes("satellite")) {
-        if (!map.getSource('mapbox-dem')) {
-          map.addSource('mapbox-dem', {
-            type: 'raster-dem',
-            url: 'mapbox://mapbox.terrain-rgb',
-            tileSize: 512,
-            maxzoom: 14
-          });
-        }
-        
-      }
+      window.initMapWithPhotos(center, zoom);
     });
-  });
   }
 
   const infoBtn = document.getElementById("map-info-btn");
