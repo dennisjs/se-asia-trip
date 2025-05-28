@@ -16,6 +16,8 @@ async function fetchLatestLocation() {
 let currentMapStyle = 'mapbox://styles/mapbox/streets-v12';
 let map, photoMarkers = [], infoBox;
 let perspectiveEnabled = false;
+let rememberViewToggle = false;
+let rememberTerrainToggle = false;
 let mapInfoBoxWasOpen = false; // NEW FLAG
 
 function buildMap(locations, preserveCenter, preserveZoom) {
@@ -35,6 +37,33 @@ function buildMap(locations, preserveCenter, preserveZoom) {
   });
 
   map.on("load", () => {
+if (rememberViewToggle) {
+      perspectiveEnabled = true;
+      map.easeTo({ pitch: 60, bearing: -20 });
+    } else {
+      perspectiveEnabled = false;
+    }
+
+    if (rememberTerrainToggle && currentMapStyle.includes("satellite")) {
+      if (!map.getSource('mapbox-dem')) {
+        map.addSource('mapbox-dem', {
+          type: 'raster-dem',
+          url: 'mapbox://mapbox.terrain-rgb',
+          tileSize: 512,
+          maxzoom: 14
+        });
+      }
+      map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
+      if (!map.getLayer('hillshade')) {
+        map.addLayer({
+          id: 'hillshade',
+          type: 'hillshade',
+          source: 'mapbox-dem',
+          layout: {},
+          paint: {}
+        });
+      }
+    }
     photoMarkers = [];
     fetch("timeline.json")
       .then(r => r.json())
