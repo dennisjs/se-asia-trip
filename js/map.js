@@ -253,20 +253,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("toggle-satellite");
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
-      const isSatellite = currentMapStyle === 'mapbox://styles/mapbox/satellite-streets-v12';
-      currentMapStyle = isSatellite
-        ? 'mapbox://styles/mapbox/streets-v12'
-        : 'mapbox://styles/mapbox/satellite-streets-v12';
-      toggleBtn.textContent = isSatellite ? 'Satellite View' : 'Map View';
+    const isSatellite = currentMapStyle === 'mapbox://styles/mapbox/satellite-streets-v12';
+    currentMapStyle = isSatellite
+      ? 'mapbox://styles/mapbox/streets-v12'
+      : 'mapbox://styles/mapbox/satellite-streets-v12';
+    toggleBtn.textContent = isSatellite ? 'Satellite View' : 'Map View';
 
-      const center = map.getCenter();
-      const zoom = map.getZoom();
+    const center = map.getCenter();
+    const zoom = map.getZoom();
 
-      const infoBox = document.getElementById("map-info-box");
-      mapInfoBoxWasOpen = infoBox?.classList.contains("active");
+    const infoBox = document.getElementById("map-info-box");
+    mapInfoBoxWasOpen = infoBox?.classList.contains("active");
 
-      window.initMapWithPhotos(center, zoom);
+    const viewChecked = document.getElementById("view-toggle")?.checked;
+    const terrainChecked = document.getElementById("terrain-toggle")?.checked;
+
+    window.initMapWithPhotos(center, zoom);
+
+    map.on("style.load", () => {
+      if (viewChecked) {
+        perspectiveEnabled = true;
+        map.easeTo({ pitch: 60, bearing: -20 });
+      } else {
+        perspectiveEnabled = false;
+      }
+
+      if (terrainChecked && currentMapStyle.includes("satellite")) {
+        if (!map.getSource('mapbox-dem')) {
+          map.addSource('mapbox-dem', {
+            type: 'raster-dem',
+            url: 'mapbox://mapbox.terrain-rgb',
+            tileSize: 512,
+            maxzoom: 14
+          });
+        }
+        map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
+        if (!map.getLayer('hillshade')) {
+          map.addLayer({
+            id: 'hillshade',
+            type: 'hillshade',
+            source: 'mapbox-dem',
+            layout: {},
+            paint: {}
+          });
+        }
+      }
     });
+  });
   }
 
   const infoBtn = document.getElementById("map-info-btn");
