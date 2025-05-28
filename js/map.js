@@ -45,13 +45,12 @@ if (rememberViewToggle) {
     }
 
     if (rememberTerrainToggle && currentMapStyle.includes("satellite")) {
-      if (!map.getSource('mapbox-dem')) {
-        map.addSource('mapbox-dem', {
-          type: 'raster-dem',
-          url: 'mapbox://mapbox.terrain-rgb',
-          tileSize: 512,
-          maxzoom: 14
-        });
+  const terrainToggle = document.getElementById("terrain-toggle");
+  if (terrainToggle) {
+    terrainToggle.checked = true;
+    terrainToggle.dispatchEvent(new Event('change'));
+  }
+});
       }
       map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
       if (!map.getLayer('hillshade')) {
