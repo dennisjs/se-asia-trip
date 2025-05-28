@@ -52,16 +52,7 @@ if (rememberViewToggle) {
   }
 }
       }
-      map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
-      if (!map.getLayer('hillshade')) {
-        map.addLayer({
-          id: 'hillshade',
-          type: 'hillshade',
-          source: 'mapbox-dem',
-          layout: {},
-          paint: {}
-        });
-      }
+      
     }
     photoMarkers = [];
     fetch("timeline.json")
@@ -178,16 +169,7 @@ if (rememberViewToggle) {
                 maxzoom: 14
               });
             }
-            map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
-            if (!map.getLayer('hillshade')) {
-              map.addLayer({
-                id: 'hillshade',
-                type: 'hillshade',
-                source: 'mapbox-dem',
-                layout: {},
-                paint: {}
-              });
-            }
+            
           } else {
             map.setTerrain(null);
             if (map.getLayer('hillshade')) map.removeLayer('hillshade');
@@ -315,16 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
             maxzoom: 14
           });
         }
-        map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.0 });
-        if (!map.getLayer('hillshade')) {
-          map.addLayer({
-            id: 'hillshade',
-            type: 'hillshade',
-            source: 'mapbox-dem',
-            layout: {},
-            paint: {}
-          });
-        }
+        
       }
     });
   });
