@@ -10,5 +10,11 @@
     "src": "media/coming_soon.png",
     "caption": "",
     "description":  "Trip hasn't started yet!  June 2!"
+  },
+  "2025-06-04": {
+    "type": "map",
+    "mapSrc": "media/zoom_ten_moons_lipe_resort_80deg_terrain.html",
+    "caption": "Ten Moons Arrival",
+    "description": "Here's where I landed today!"
   }
 }
