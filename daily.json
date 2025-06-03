@@ -11,6 +11,29 @@
     "caption": "The Sun",
     "description":  "A track I wrote."
   },
+  "2025-06-04": {
+    "items": [
+      {
+        "type": "image",
+        "src": "media/photo1.jpg",
+        "caption": "Morning beach walk"
+      },
+      {
+        "type": "image",
+        "src": "media/clip1.mp4",
+        "caption": "Evening drone flyover"
+      },
+      {
+        "type": "map",
+        "src": "media/zoom_to_lipe.html",
+        "caption": "Arrival at Koh Lipe"
+      }
+    ],
+    "description": "A day on the island.\\nSunrise, swim, and explore.",
+    "weather": "Sunny, 31°C"
+}
+
+  
   "2025-06-03": {
     "type": "image",
     "src": "media/coming_soon.png",
