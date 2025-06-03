@@ -96,17 +96,22 @@
 
   <script src="js/daily.js"></script>
   <hr>
-  <div style="max-width: 600px; margin: 2rem auto;">
-    <h3>Leave a Comment</h3>
-    <form id="daily-comment-form">
-      <input type="text" id="commentName" placeholder="Your name" required style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem;">
-      <textarea id="commentText" placeholder="Your message" required style="width: 100%; padding: 0.5rem; height: 80px;"></textarea>
-      <button type="submit" style="margin-top: 0.5rem;">Submit</button>
-    </form>
+  <div class="daily-layout">
+    <div class="daily-box" style="flex: 2; max-width: 600px;">
+      <h4>Comments</h4>
+      <div id="dailyCommentsContainer" style="margin-top: 1rem;"></div>
+    </div>
   
-    <h4>Comments</h4>
-    <div id="dailyCommentsContainer" style="margin-top: 1rem;"></div>
-</div>
+    <div class="daily-description" style="flex: 1; max-width: 300px;">
+      <h3>Leave a Comment</h3>
+      <form id="daily-comment-form">
+        <input type="text" id="commentName" placeholder="Your name" required style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem;">
+        <textarea id="commentText" placeholder="Your message" required style="width: 100%; padding: 0.5rem; height: 80px;"></textarea>
+        <button type="submit" style="margin-top: 0.5rem;">Submit</button>
+      </form>
+    </div>
+  </div>
+
 
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
