@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("daily.json")
     .then((res) => res.json())
     .then((json) => {
-      availableDates = Object.keys(json).sort((a, b) => new Date(b) - new Date(a)).slice(0, 3);
+      availableDates = Object.keys(json).sort((a, b) => new Date(b) - new Date(a));
       if (availableDates.length) {
         loadDailyThingByDate(availableDates[0]);
       }
