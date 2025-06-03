@@ -391,3 +391,25 @@ nav a {
   user-select: none;
   visibility: visible; /* make sure it's not hidden by default */
 }
+
+#leftArrow,
+#rightArrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  color: #33adff;
+  z-index: 9999;
+  cursor: pointer;
+  user-select: none;
+  pointer-events: all;
+}
+
+#leftArrow {
+  left: 10px;
+}
+
+#rightArrow {
+  right: 10px;
+}
+
