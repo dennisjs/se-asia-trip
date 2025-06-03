@@ -6,7 +6,7 @@
         "src": "media/zoom_ten_moons_lipe_resort_80deg_terrain.html",
         "caption": "Ten Moons Arrival"
       }
-    ]
+    ],
     "description": "Here's where I landed today!"
   },
   "2025-05-22": {
@@ -16,7 +16,7 @@
         "src": "media/The_Sun.mp3",
         "caption": "The Sun"
       }
-    ]
+    ],
     "description":  "A track I wrote."
   },
   "2025-06-03": {
@@ -36,7 +36,7 @@
         "src": "media/test2.png",
         "caption": "Test2 image"
       }
-    ]
+    ],
     "description": "A day on the island.\\nSunrise, swim, and explore."
   }
 }
