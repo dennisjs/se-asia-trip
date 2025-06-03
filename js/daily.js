@@ -154,6 +154,8 @@ function loadDailyThingByDate(date) {
       dailyContainer.innerHTML = html;
       descriptionContainer.innerHTML = '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
         "<p>" + (entry.description || "").replace(/\\n/g, "<br>") + "</p>";
+
+      window.latestDailyKey = date;
       
       // Show/hide arrows based on position
       document.getElementById("leftArrow").style.display = (currentIndex < availableDates.length - 1) ? "inline" : "none";
