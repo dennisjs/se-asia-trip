@@ -108,7 +108,7 @@ function loadDailyThingByDate(date) {
     .then((res) => res.json())
     .then((json) => {
       if (!availableDates.length) {
-        availableDates = Object.keys(json).sort((a, b) => new Date(b) - new Date(a)).slice(0, 3);
+        availableDates = Object.keys(json).sort((a, b) => new Date(b) - new Date(a));
       }
 
       const entry = json[date];
