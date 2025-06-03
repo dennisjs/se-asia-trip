@@ -29,19 +29,21 @@ async function loadDailyThing() {
     });
     
     // Set media
-    let html = "";
-    if (entry.type === "audio") {
-      html = `<audio controls><source src="${entry.src}" type="audio/mpeg"></audio>`;
-    } else if (entry.type === "image") {
-      html = `<img src="${entry.src}" style="max-width: 100%; height: auto;" />`;
-    } else if (entry.type === "video") {
-      html = `<video controls style="max-width: 100%;"><source src="${entry.src}" type="video/mp4"></video>`;
-    } else if (entry.type === "map") {
-      html = `<iframe src="${entry.mapSrc}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe>`;
-    } else if (entry.type === "map") {
-      html = `<iframe src="${entry.mapSrc}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe>`;
+    let mediaHtml = "";
+    if (entry.items && Array.isArray(entry.items)) {
+      entry.items.forEach(item => {
+        if (item.type === "image") {
+          mediaHtml += `<div class="media-block"><img src="${item.src}" style="max-width: 100%; height: auto;"><p>${item.caption || ""}</p></div>`;
+        } else if (item.type === "video") {
+          mediaHtml += `<div class="media-block"><video controls src="${item.src}" style="max-width: 100%;"></video><p>${item.caption || ""}</p></div>`;
+        } else if (item.type === "audio") {
+          mediaHtml += `<div class="media-block"><audio controls src="${item.src}"></audio><p>${item.caption || ""}</p></div>`;
+        } else if (item.type === "map") {
+          mediaHtml += `<div class="media-block"><iframe src="${item.src}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe><p>${item.caption || ""}</p></div>`;
+        }
+      });
     } else {
-      html = "<p>Unsupported media type.</p>";
+      mediaHtml = "<p>No media items found.</p>";
     }
 
     container.innerHTML = html + (entry.caption ? `<p>${entry.caption}</p>` : "");
@@ -140,11 +142,10 @@ function loadDailyThingByDate(date) {
         html = '<div>Unsupported type</div>';
       }
 
-      dailyContainer.innerHTML = html;
+      dailyContainer.innerHTML = mediaHtml;
       descriptionContainer.innerHTML = '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
-        (entry.caption ? "<h3>" + entry.caption + "</h3>" : "") +
-        "<p>" + (entry.description || "").replace(/\\n/g, "<br>") + "</p>"
-
+        "<p>" + (entry.description || "").replace(/\\n/g, "<br>") + "</p>";
+      
       // Show/hide arrows based on position
       document.getElementById("leftArrow").style.display = (currentIndex < availableDates.length - 1) ? "inline" : "none";
       document.getElementById("rightArrow").style.display = (currentIndex > 0) ? "inline" : "none";
