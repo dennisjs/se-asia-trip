@@ -1,4 +1,10 @@
 {
+  "2025-05-03": {
+  "type": "map",
+  "mapSrc": "media/zoom_ten_moons_lipe_resort_80deg_terrain.html",
+  "caption": "Ten Moons Arrival",
+  "description": "Here's where I landed today!"
+  },
   "2025-05-22": {
     "type": "audio",
     "src": "media/The_Sun.mp3",
@@ -10,11 +16,5 @@
     "src": "media/coming_soon.png",
     "caption": "",
     "description":  "Trip hasn't started yet!  June 2!"
-  },
-  "2025-06-03": {
-    "type": "map",
-    "mapSrc": "media/zoom_ten_moons_lipe_resort_80deg_terrain.html",
-    "caption": "Ten Moons Arrival",
-    "description": "Here's where I landed today!"
   }
 }
