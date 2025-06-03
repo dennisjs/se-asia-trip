@@ -71,7 +71,7 @@ function initFirebaseComments() {
   const refForDate = (key) => db.ref("daily-comments/" + key);
 
   // load comments
-  function loadComments(dateKey) {
+  window.loadComments = function(dateKey) {
     container.innerHTML = "";
     refForDate(dateKey).off(); // clear previous listener
     refForDate(dateKey).on("value", snap => {
