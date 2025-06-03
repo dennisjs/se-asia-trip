@@ -143,7 +143,8 @@ function loadDailyThingByDate(date) {
       }
 
       dailyContainer.innerHTML = html;
-      descriptionContainer.innerHTML = '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
+      dateContainer.textContent = "📅 " + formatted;
+      descriptionContainer.innerHTML = 
         (entry.caption ? "<h3>" + entry.caption + "</h3>" : "") +
         "<p>" + (entry.description || "") + "</p>";
     });
