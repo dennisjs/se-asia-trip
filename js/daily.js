@@ -133,18 +133,24 @@ function loadDailyThingByDate(date) {
       
       let html = "";
 
-      if (entry.type === "image") {
-        html = '<img src="' + entry.src + '" style="max-width: 100%; height: auto;" />';
-      } else if (entry.type === "video") {
-        html = '<video controls src="' + entry.src + '"></video>';
-      } else if (entry.type === "audio") {
-        html = '<audio controls src="' + entry.src + '"></audio>';
-      } else if (entry.type === "map") {
-        html = '<iframe src="' + entry.mapSrc + '" style="width:100%; height:500px; border:none;" allowfullscreen></iframe>';
+      if (entry.items && Array.isArray(entry.items)) {
+        entry.items.forEach(item => {
+          if (item.type === "image") {
+            html += `<div class="media-block"><img src="${item.src}" style="max-width: 100%; height: auto;"><p>${item.caption || ""}</p></div>`;
+          } else if (item.type === "video") {
+            html += `<div class="media-block"><video controls src="${item.src}" style="max-width: 100%;"></video><p>${item.caption || ""}</p></div>`;
+          } else if (item.type === "audio") {
+            html += `<div class="media-block"><audio controls src="${item.src}"></audio><p>${item.caption || ""}</p></div>`;
+          } else if (item.type === "map") {
+            html += `<div class="media-block"><iframe src="${item.src}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe><p>${item.caption || ""}</p></div>`;
+          } else {
+            html += `<div>Unsupported media type: ${item.type}</div>`;
+          }
+        });
       } else {
-        html = '<div>Unsupported type</div>';
+        html = "<p>No media items found.</p>";
       }
-
+    
       dailyContainer.innerHTML = html;
       descriptionContainer.innerHTML = '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
         "<p>" + (entry.description || "").replace(/\\n/g, "<br>") + "</p>";
