@@ -3,50 +3,48 @@ window.addEventListener("DOMContentLoaded", async () => {
   initFirebaseComments(); // then load comments system
 });
 
-async function loadDailyThing() {
-  const container = document.getElementById("dailyContainer");
-  const descContainer = document.getElementById("descriptionContainer");
-  const dateContainer = document.getElementById("entryDate");
+async 
+function loadDailyThing() {
+  const currentDate = availableDates[0];
+  const entry = dailyData[currentDate];
 
-  try {
-    const res = await fetch("daily.json");
-    const data = await res.json();
+  if (!entry) {
+    console.warn("No data found for date:", currentDate);
+    return;
+  }
 
-    const availableDates = Object.keys(data).sort().reverse();
-    const latestDate = availableDates[0];
-    const entry = data[latestDate];
+  const dateObj = new Date(currentDate);
+  const formatted = dateObj.toLocaleDateString(undefined, {
+    year: "numeric", month: "long", day: "numeric"
+  });
 
-    if (!entry) return;
+  document.getElementById("entryDate").textContent = "📅 " + formatted;
 
-    // Set description with line breaks
-    descContainer.innerHTML = (entry.description || "No description provided.").replace(/\\n/g, "<br>");
+  let mediaHtml = "";
 
-    // Set formatted date
-    const parts = latestDate.split("-");
-    const localDate = new Date(parts[0], parts[1] - 1, parts[2]);
-    const formatted = localDate.toLocaleDateString(undefined, {
-      year: "numeric", month: "long", day: "numeric"
+  if (entry.items && Array.isArray(entry.items)) {
+    entry.items.forEach(item => {
+      if (item.type === "image") {
+        mediaHtml += `<div class="media-block"><img src="${item.src}" style="max-width: 100%; height: auto;"><p>${item.caption || ""}</p></div>`;
+      } else if (item.type === "video") {
+        mediaHtml += `<div class="media-block"><video controls src="${item.src}" style="max-width: 100%;"></video><p>${item.caption || ""}</p></div>`;
+      } else if (item.type === "audio") {
+        mediaHtml += `<div class="media-block"><audio controls src="${item.src}"></audio><p>${item.caption || ""}</p></div>`;
+      } else if (item.type === "map") {
+        mediaHtml += `<div class="media-block"><iframe src="${item.src}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe><p>${item.caption || ""}</p></div>`;
+      }
     });
-    
-    // Set media
-    let mediaHtml = "";
-    if (entry.items && Array.isArray(entry.items)) {
-      entry.items.forEach(item => {
-        if (item.type === "image") {
-          mediaHtml += `<div class="media-block"><img src="${item.src}" style="max-width: 100%; height: auto;"><p>${item.caption || ""}</p></div>`;
-        } else if (item.type === "video") {
-          mediaHtml += `<div class="media-block"><video controls src="${item.src}" style="max-width: 100%;"></video><p>${item.caption || ""}</p></div>`;
-        } else if (item.type === "audio") {
-          mediaHtml += `<div class="media-block"><audio controls src="${item.src}"></audio><p>${item.caption || ""}</p></div>`;
-        } else if (item.type === "map") {
-          mediaHtml += `<div class="media-block"><iframe src="${item.src}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe><p>${item.caption || ""}</p></div>`;
-        }
-      });
-    } else {
-      mediaHtml = "<p>No media items found.</p>";
-    }
+  } else {
+    mediaHtml = "<p>No media items found.</p>";
+  }
 
-    container.innerHTML = html + (entry.caption ? `<p>${entry.caption}</p>` : "");
+  container.innerHTML = mediaHtml;
+  descriptionContainer.innerHTML =
+    '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
+    "<p>" + (entry.description || "").replace(/
+/g, "<br>") + "</p>";
+}
+</p>` : "");
 
     // store for comment system
     window.latestDailyKey = latestDate;
