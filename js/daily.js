@@ -156,7 +156,10 @@ function loadDailyThingByDate(date) {
         "<p>" + (entry.description || "").replace(/\\n/g, "<br>") + "</p>";
 
       window.latestDailyKey = date;
-      
+      if (typeof loadComments === "function") {
+        loadComments(date);
+      }
+
       // Show/hide arrows based on position
       document.getElementById("leftArrow").style.display = (currentIndex < availableDates.length - 1) ? "inline" : "none";
       document.getElementById("rightArrow").style.display = (currentIndex > 0) ? "inline" : "none";
