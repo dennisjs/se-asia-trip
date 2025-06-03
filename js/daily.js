@@ -143,7 +143,11 @@ function loadDailyThingByDate(date) {
       }
 
       dailyContainer.innerHTML = html;
-      descriptionContainer.innerHTML = '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
+      
+descriptionContainer.innerHTML = '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
+document.getElementById("leftArrow").style.visibility = (currentIndex < availableDates.length - 1) ? "visible" : "hidden";
+document.getElementById("rightArrow").style.visibility = (currentIndex > 0) ? "visible" : "hidden";
+
         (entry.caption ? "<h3>" + entry.caption + "</h3>" : "") +
         "<p>" + (entry.description || "") + "</p>";
     });
