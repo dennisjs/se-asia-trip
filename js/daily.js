@@ -49,7 +49,6 @@ async function loadDailyThing() {
       html = "<p>No media items found.</p>";
     }
 
-
     container.innerHTML = html + (entry.caption ? `<p>${entry.caption}</p>` : "");
 
     // store for comment system
