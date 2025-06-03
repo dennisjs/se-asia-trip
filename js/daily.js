@@ -30,7 +30,7 @@ async function loadDailyThing() {
     
     // Set media
     let html = "";
-
+    
     if (entry.items && Array.isArray(entry.items)) {
       entry.items.forEach(item => {
         if (item.type === "image") {
@@ -41,11 +41,14 @@ async function loadDailyThing() {
           html += `<div class="media-block"><audio controls src="${item.src}"></audio><p>${item.caption || ""}</p></div>`;
         } else if (item.type === "map") {
           html += `<div class="media-block"><iframe src="${item.src}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe><p>${item.caption || ""}</p></div>`;
+        } else {
+          html += `<div>Unsupported media type: ${item.type}</div>`;
         }
       });
     } else {
       html = "<p>No media items found.</p>";
     }
+
 
     container.innerHTML = html + (entry.caption ? `<p>${entry.caption}</p>` : "");
 
