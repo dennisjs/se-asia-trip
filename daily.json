@@ -24,17 +24,17 @@
       {
         "type": "image",
         "src": "media/coming_soon.jpg",
-        "caption": "Morning beach walk"
+        "caption": "Test0 image"
       },
       {
         "type": "image",
-        "src": "media/test.jpg",
-        "caption": "Evening drone flyover"
+        "src": "media/test.png",
+        "caption": "Test1 image"
       },
       {
-        "type": "map",
-        "src": "media/zoom_to_lipe.html",
-        "caption": "Arrival at Koh Lipe"
+        "type": "image",
+        "src": "media/test2.png",
+        "caption": "Test2 image"
       }
     ]
     "description": "A day on the island.\\nSunrise, swim, and explore."
