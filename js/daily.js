@@ -27,8 +27,7 @@ async function loadDailyThing() {
     const formatted = localDate.toLocaleDateString(undefined, {
       year: "numeric", month: "long", day: "numeric"
     });
-    dateContainer.textContent = "📅 " + formatted;
-
+    
     // Set media
     let html = "";
     if (entry.type === "audio") {
@@ -126,8 +125,7 @@ function loadDailyThingByDate(date) {
         month: "long",
         day: "numeric",
       });
-      dateContainer.textContent = "📅 " + formatted;
-
+      
       let html = "";
 
       if (entry.type === "image") {
