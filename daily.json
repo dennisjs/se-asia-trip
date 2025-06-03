@@ -1,11 +1,17 @@
 {
+  "2025-05-03": {
+  "type": "map",
+  "mapSrc": "media/zoom_ten_moons_lipe_resort_80deg_terrain.html",
+  "caption": "Ten Moons Arrival",
+  "description": "Here's where I landed today!"
+  },
   "2025-05-22": {
     "type": "audio",
     "src": "media/The_Sun.mp3",
     "caption": "The Sun",
     "description":  "A track I wrote."
   },
-  "2025-05-23": {
+  "2025-06-03": {
     "type": "image",
     "src": "media/coming_soon.png",
     "caption": "",
