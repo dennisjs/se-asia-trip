@@ -39,6 +39,8 @@ async function loadDailyThing() {
       html = `<video controls style="max-width: 100%;"><source src="${entry.src}" type="video/mp4"></video>`;
     } else if (entry.type === "map") {
       html = `<iframe src="${entry.mapSrc}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe>`;
+    } else if (entry.type === "map") {
+      html = `<iframe src="${entry.mapSrc}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe>`;
     } else {
       html = "<p>Unsupported media type.</p>";
     }
