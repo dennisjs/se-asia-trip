@@ -372,5 +372,25 @@ nav a {
   transform: translateY(-6px);
 }
 
+.arrow-nav {
+  position: fixed;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.nav-arrow {
+  font-size: 2rem;
+  color: #33adff;
+  margin: 0 1rem;
+  cursor: pointer;
+  pointer-events: all;
+  user-select: none;
+  visibility: visible; /* make sure it's not hidden by default */
+}
+
 }
 
