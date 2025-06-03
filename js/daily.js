@@ -54,6 +54,10 @@ async function loadDailyThing() {
     // store for comment system
     window.latestDailyKey = latestDate;
 
+    if (typeof loadComments === "function") {
+      loadComments(latestDate);
+    }
+
   } catch (err) {
     console.error("Failed to load daily.json:", err);
   }
@@ -80,11 +84,6 @@ function initFirebaseComments() {
     refForDate(dateKey).push({ name, text });
     form.reset();
   });
-
-  // load existing comments
-  if (window.latestDailyKey) {
-    loadComments(window.latestDailyKey);
-  }
 }
 
 window.loadComments = function(dateKey) {
