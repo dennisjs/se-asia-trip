@@ -29,21 +29,22 @@ async function loadDailyThing() {
     });
     
     // Set media
-    let mediaHtml = "";
+    let html = "";
+
     if (entry.items && Array.isArray(entry.items)) {
       entry.items.forEach(item => {
         if (item.type === "image") {
-          mediaHtml += `<div class="media-block"><img src="${item.src}" style="max-width: 100%; height: auto;"><p>${item.caption || ""}</p></div>`;
+          html += `<div class="media-block"><img src="${item.src}" style="max-width: 100%; height: auto;"><p>${item.caption || ""}</p></div>`;
         } else if (item.type === "video") {
-          mediaHtml += `<div class="media-block"><video controls src="${item.src}" style="max-width: 100%;"></video><p>${item.caption || ""}</p></div>`;
+          html += `<div class="media-block"><video controls src="${item.src}" style="max-width: 100%;"></video><p>${item.caption || ""}</p></div>`;
         } else if (item.type === "audio") {
-          mediaHtml += `<div class="media-block"><audio controls src="${item.src}"></audio><p>${item.caption || ""}</p></div>`;
+          html += `<div class="media-block"><audio controls src="${item.src}"></audio><p>${item.caption || ""}</p></div>`;
         } else if (item.type === "map") {
-          mediaHtml += `<div class="media-block"><iframe src="${item.src}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe><p>${item.caption || ""}</p></div>`;
+          html += `<div class="media-block"><iframe src="${item.src}" style="width:100%; height:500px; border:none;" allowfullscreen></iframe><p>${item.caption || ""}</p></div>`;
         }
       });
     } else {
-      mediaHtml = "<p>No media items found.</p>";
+      html = "<p>No media items found.</p>";
     }
 
     container.innerHTML = mediaHtml + (entry.caption ? `<p>${entry.caption}</p>` : "");
