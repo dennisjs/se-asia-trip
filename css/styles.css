@@ -382,45 +382,20 @@ nav a {
   z-index: 1000;
 }
 
+/* Shared base arrow styling */
 .nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
   font-size: 2rem;
   color: #33adff;
-  margin: 0 1rem;
+  z-index: 9999;
   cursor: pointer;
+  user-select: none;
   pointer-events: all;
-  user-select: none;
-  visibility: visible; /* make sure it's not hidden by default */
 }
 
-#rightArrow {
-  visibility: visible;
-  display: inline;
-  position: fixed;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 9999;
-  font-size: 2rem;
-  color: #33adff;
-  cursor: pointer;
-  user-select: none;
-}
-
-#leftArrow {
-  visibility: visible;
-  display: inline;
-  position: fixed;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 9999;
-  font-size: 2rem;
-  color: #33adff;
-  cursor: pointer;
-  user-select: none;
-}
-
-
+/* Specific positions */
 #leftArrow {
   left: 10px;
 }
@@ -428,4 +403,6 @@ nav a {
 #rightArrow {
   right: 10px;
 }
+
+
 
