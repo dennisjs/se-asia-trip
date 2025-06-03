@@ -1,3 +1,5 @@
+
+<!-- Inserting into daily.html based on original structure, with navigation arrows -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,7 +85,13 @@
 <body>
   <a href="index.html" class="back-link">← Back to Main Page</a>
   <h2 class="timeline-title">The Daily Thing (mostly daily)</h2>
-  <div class="last-entry-date" id="entryDate"></div>
+  
+<div class="last-entry-date" id="entryDate"></div>
+<div class="arrow-nav">
+  <span id="leftArrow" class="nav-arrow">←</span>
+  <span id="rightArrow" class="nav-arrow">→</span>
+</div>
+
 
   <div class="daily-layout">
     <div class="daily-description" id="descriptionContainer">
@@ -118,3 +126,24 @@
 
 </body>
 </html>
+
+
+<style>
+.arrow-nav {
+  position: fixed;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.nav-arrow {
+  font-size: 2rem;
+  color: #33adff;
+  margin: 0 1rem;
+  cursor: pointer;
+  pointer-events: all;
+  user-select: none;
+}
+</style>
