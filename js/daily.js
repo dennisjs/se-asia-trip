@@ -144,6 +144,11 @@ function loadDailyThingByDate(date) {
       descriptionContainer.innerHTML = '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
         (entry.caption ? "<h3>" + entry.caption + "</h3>" : "") +
         "<p>" + (entry.description || "") + "</p>";
+
+      // Show/hide arrows based on position
+      document.getElementById("leftArrow").style.display = (currentIndex < availableDates.length - 1) ? "inline" : "none";
+      document.getElementById("rightArrow").style.display = (currentIndex > 0) ? "inline" : "none";
+
     });
 }
 
