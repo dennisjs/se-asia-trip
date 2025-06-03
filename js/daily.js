@@ -46,7 +46,7 @@ async function loadDailyThing() {
       mediaHtml = "<p>No media items found.</p>";
     }
 
-    container.innerHTML = html + (entry.caption ? `<p>${entry.caption}</p>` : "");
+    container.innerHTML = mediaHtml + (entry.caption ? `<p>${entry.caption}</p>` : "");
 
     // store for comment system
     window.latestDailyKey = latestDate;
@@ -142,7 +142,7 @@ function loadDailyThingByDate(date) {
         html = '<div>Unsupported type</div>';
       }
 
-      dailyContainer.innerHTML = mediaHtml;
+      dailyContainer.innerHTML = html;
       descriptionContainer.innerHTML = '<div class="last-entry-date" id="entryDate">📅 ' + formatted + '</div>' +
         "<p>" + (entry.description || "").replace(/\\n/g, "<br>") + "</p>";
       
