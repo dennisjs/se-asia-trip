@@ -131,7 +131,7 @@ function loadDailyThingByDate(date) {
       let html = "";
 
       if (entry.type === "image") {
-        html = '<img src="' + entry.src + '" alt="Daily Image" />';
+        html = '<img src="' + entry.src + '" style="max-width: 100%; height: auto;" />';
       } else if (entry.type === "video") {
         html = '<video controls src="' + entry.src + '"></video>';
       } else if (entry.type === "audio") {
