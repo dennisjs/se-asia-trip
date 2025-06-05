@@ -3,10 +3,15 @@ mapboxgl.accessToken = window.CONFIG.MAPBOX_TOKEN;
 
 async function fetchLatestLocation() {
   try {
-    const res = await fetch("location.json");
+    const res = await fetch(`location.json?v=${Date.now()}`);
     const locations = await res.json();
     if (!Array.isArray(locations)) return [locations];
-    return locations;
+    locations.sort((a, b) => {
+      const da = new Date(a.arrival_date), db = new Date(b.arrival_date);
+      return da - db;
+});
+return locations;
+
   } catch (e) {
     console.error("Location fetch error:", e);
     return [];
@@ -53,7 +58,7 @@ if (rememberViewToggle) {
       }
     }
     photoMarkers = [];
-    fetch("timeline.json")
+    fetch(`timeline.json?v=${Date.now()}`)
       .then(r => r.json())
       .then(timeline => {
         timeline.forEach(day => {
@@ -66,10 +71,10 @@ if (rememberViewToggle) {
               width: 32px; height: 32px; border-radius: 4px;
               background-size: cover; background-position: center;
               box-shadow: 0 0 4px rgba(0,0,0,0.5);
-              background-image: url(images/${photo.id}.jpg);
+              background-image: url(images/${photo.id});
               cursor: pointer;
             `;
-            el.onclick = () => showOverlay("images/" + photo.id + ".jpg", photo.caption);
+            el.onclick = () => showOverlay("images/" + photo.id, photo.caption);
             const marker = new mapboxgl.Marker(el).setLngLat([photo.lng, photo.lat]).addTo(map);
             photoMarkers.push(marker);
           });
