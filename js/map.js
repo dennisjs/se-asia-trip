@@ -77,7 +77,14 @@ if (rememberViewToggle) {
             `;
             
             if (useThumbnails) {
+              console.log("🖼️ Attempting to use image:", photo.id);
+              console.log("📍 Location:", photo.lat, photo.lng);
+              console.log("🔗 Full image path: images/" + photo.id);
+
               el.style.backgroundImage = `url(images/${photo.id})`;
+              el.onload = () => console.log("✅ Loaded:", photo.id);
+              el.onerror = () => console.warn("❌ Failed to load:", photo.id);
+
 
             } else {
               el.style.backgroundImage = `url(https://img.icons8.com/ios-filled/50/000000/camera.png)`;
