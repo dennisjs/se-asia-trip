@@ -96,7 +96,7 @@ if (rememberViewToggle) {
         if (styleToggleBtn) {
           styleToggleBtn.onclick = () => {
             useThumbnails = !useThumbnails;
-            styleToggleBtn.textContent = useThumbnails ? "camera icons" : "image icons";
+            styleToggleBtn.textContent = useThumbnails ? "Camera Icons" : "Image Icons";
         
             const center = map.getCenter();
             const zoom = map.getZoom();
