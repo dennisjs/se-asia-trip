@@ -78,6 +78,7 @@ if (rememberViewToggle) {
             
             if (useThumbnails) {
               el.style.backgroundImage = `url(images/${photo.id})`;
+
             } else {
               el.style.backgroundImage = `url(https://img.icons8.com/ios-filled/50/000000/camera.png)`;
               el.style.backgroundSize = "60%";
@@ -86,7 +87,7 @@ if (rememberViewToggle) {
               el.style.backgroundColor = "#fff";
             }
             
-            el.onclick = () => showOverlay("images/" + photo.id, photo.caption);
+            el.onclick = () => showOverlay(`images/${photo.id}`, photo.caption);
             const marker = new mapboxgl.Marker(el).setLngLat([photo.lng, photo.lat]).addTo(map);
             photoMarkers.push(marker);
 
